@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PathPay Clickable Bundle Dashboard</title>
+<style>
+:root{
+  --bg:#030713;--panel:rgba(9,18,40,.86);--panel2:rgba(13,27,58,.78);--line:rgba(255,255,255,.12);
+  --text:#f8fbff;--muted:#94a7c4;--soft:#c9d7eb;--blue:#38bdf8;--purple:#8b5cf6;--pink:#d946ef;--green:#34d399;--yellow:#facc15;--red:#fb7185;--shadow:0 28px 85px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);
+  background:
+    radial-gradient(circle at 12% -8%,rgba(56,189,248,.24),transparent 33%),
+    radial-gradient(circle at 86% 0%,rgba(139,92,246,.24),transparent 31%),
+    radial-gradient(circle at 50% 115%,rgba(52,211,153,.12),transparent 36%),
+    linear-gradient(135deg,#02040c,#071226 58%,#030713);
+}
+body:before{content:"";position:fixed;inset:0;z-index:-1;opacity:.13;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.86),transparent 92%)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.app{display:grid;grid-template-columns:282px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:20px 17px;border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(2,8,20,.96),rgba(4,10,22,.82));backdrop-filter:blur(18px);overflow:auto}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:24px}.logo{width:50px;height:50px;border-radius:17px;display:grid;place-items:center;font-weight:1000;letter-spacing:-.08em;background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));box-shadow:0 0 42px rgba(56,189,248,.28)}.brand h1{font-size:25px;letter-spacing:-.08em;line-height:.95}.brand p{font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin-top:5px}
+.nav{display:grid;gap:8px}.nav button{border:1px solid transparent;border-radius:16px;background:transparent;color:#d5e2f7;text-align:left;padding:13px 14px;font-weight:850;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(139,92,246,.18));border-color:rgba(56,189,248,.3);color:white;box-shadow:0 0 30px rgba(56,189,248,.15)}.ico{width:24px;text-align:center;font-size:18px}
+.sideBox{margin-top:28px;border:1px solid rgba(56,189,248,.2);border-radius:22px;background:rgba(255,255,255,.045);padding:17px;box-shadow:var(--shadow)}.sideBox p{color:var(--muted);font-size:12px;line-height:1.45;margin-top:7px}
+.main{min-width:0;padding:18px 28px 42px}.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);margin:-18px -28px 18px;padding:0 28px;background:rgba(3,7,19,.52);backdrop-filter:blur(16px);position:sticky;top:0;z-index:30}
+.search{flex:1;max-width:780px;position:relative}.search input{width:100%;height:40px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.045);color:white;padding:0 44px;outline:none}.search span{position:absolute;left:15px;top:9px;color:var(--muted)}
+.profile{display:flex;gap:12px;align-items:center}.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#fed7aa,#60a5fa);color:#111827;font-weight:1000}
+.btn,.primary,.ghost,.small{border:1px solid var(--line);border-radius:14px;color:#eef6ff;font-weight:900;background:rgba(255,255,255,.055);padding:10px 13px;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover,.ghost:hover,.small:hover{border-color:rgba(56,189,248,.35);transform:translateY(-1px)}.primary{border:0;background:linear-gradient(135deg,var(--blue),var(--purple),var(--pink));box-shadow:0 16px 42px rgba(56,189,248,.18)}.small{font-size:12px;padding:8px 10px}.full{width:100%}
+.panel{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(12,23,48,.80),rgba(6,13,28,.84));box-shadow:var(--shadow);backdrop-filter:blur(16px);position:relative;overflow:hidden}.panel:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(56,189,248,.08),transparent 35%,rgba(139,92,246,.08));opacity:.9}.panel>*{position:relative;z-index:1}
+.heroGrid{display:grid;grid-template-columns:1fr 340px;gap:18px}.hero{padding:22px}.hero h2{font-size:clamp(40px,5vw,64px);letter-spacing:-.085em;line-height:.95;margin:8px 0 12px}.grad{background:linear-gradient(135deg,#67e8f9,#38bdf8,#8b5cf6,#d946ef);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--soft);line-height:1.55;max-width:850px}.welcome{color:#9dc9ff;font-size:13px;font-weight:900}.cta{padding:20px;display:flex;flex-direction:column;justify-content:space-between}.cta h3{font-size:21px;letter-spacing:-.04em;margin-bottom:8px}.cta p{font-size:14px;color:var(--soft);line-height:1.55}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:16px 0 14px}.metric{border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,255,255,.04)}.metric small{display:block;color:var(--muted);font-weight:850;margin-bottom:6px}.metric strong{font-size:26px;letter-spacing:-.06em}.metric span{display:block;color:var(--green);font-weight:900;font-size:12px;margin-top:4px}
+.section{margin-top:18px}.sectionTitle{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:14px 14px 0;margin-bottom:12px}.sectionTitle h2{font-size:24px;letter-spacing:-.04em}.sectionTitle p{color:var(--muted);font-size:13px;margin-top:4px}.generator{padding:14px}
+.pathTabs{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}.pathTabs button{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.045);color:#dbeafe;padding:11px 9px;font-weight:900}.pathTabs button.active{border-color:rgba(56,189,248,.35);background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(139,92,246,.16));color:white}
+.generatorLayout{display:grid;grid-template-columns:370px 1fr;gap:14px}.formPanel,.outputPanel,.toolPanel{border:1px solid var(--line);border-radius:18px;background:rgba(2,8,20,.48);padding:14px;min-width:0}label{display:block;font-size:12px;color:#b8c7dc;font-weight:850;margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.055);color:white;padding:11px 12px;outline:none}textarea{min-height:80px;resize:vertical;line-height:1.45}select option{background:#091225;color:white}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.outputMain{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.liveProduct{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);overflow:hidden;min-height:720px}.previewHead{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.035)}.generatedProduct{height:720px;overflow:auto;background:#050b18;scroll-behavior:smooth}.tag{font-size:11px;font-weight:950;border-radius:999px;padding:6px 9px;display:inline-block}.high{color:#bbf7d0;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25)}.med{color:#fde68a;background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.25)}.low{color:#fecdd3;background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.25)}
+.assetsBox{border:1px solid var(--line);border-radius:18px;background:#040815;padding:13px;white-space:pre-wrap;color:#d7e6fb;font-size:13px;line-height:1.55;max-height:660px;overflow:auto}.action-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.salesGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:14px}.salesCard{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:15px}.salesCard h3{margin-bottom:8px}.salesCard pre{white-space:pre-wrap;color:#d7e6fb;font-size:13px;line-height:1.5;font-family:inherit}
+.leadGrid{display:grid;grid-template-columns:360px 1fr;gap:12px;padding:14px}.leadResults{display:grid;gap:10px}.leadCard{border:1px solid var(--line);border-radius:17px;padding:13px;background:rgba(255,255,255,.04);display:grid;grid-template-columns:1fr auto;gap:13px}.leadCard h4{font-size:15px}.leadCard p{font-size:12px;color:var(--muted);line-height:1.45;margin-top:4px}
+.reviewGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px}.review{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:15px}.person{display:flex;gap:10px;align-items:center;margin-bottom:10px}.face{width:39px;height:39px;border-radius:50%;background:linear-gradient(135deg,#fed7aa,#60a5fa);display:grid;place-items:center;font-weight:1000;color:#111827}.stars{color:var(--yellow);letter-spacing:1px}.review p{color:#dce7f8;font-size:13px;line-height:1.5}.result{display:flex;justify-content:space-between;margin-top:13px;color:var(--green);font-weight:950}
+.faq{padding:14px;display:grid;gap:9px}details{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.04);padding:13px}summary{cursor:pointer;font-weight:900;color:#e8f0ff}details p{color:var(--soft);font-size:13px;line-height:1.55;margin-top:10px}
+.toast{position:fixed;right:20px;bottom:20px;z-index:100;background:#071225;border:1px solid rgba(52,211,153,.3);color:#dcfce7;border-radius:16px;padding:13px 15px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}
+
+/* GENERATED PRODUCT STYLES */
+.productWrap{min-height:100%;font-family:Inter,system-ui,sans-serif;--accent:#38bdf8;--accent2:#8b5cf6;--accent3:#d946ef;--siteSoft:#d7e5f8;color:white;scroll-behavior:smooth}
+.productTop{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;background:rgba(3,7,18,.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.12)}
+.productLogo{font-weight:1000;letter-spacing:-.06em;font-size:20px}.productLinks{display:flex;gap:8px;flex-wrap:wrap}.productLinks button{border:1px solid rgba(255,255,255,.13);border-radius:999px;background:rgba(255,255,255,.06);color:#dbeafe;padding:8px 11px;font-weight:900;font-size:12px}.productLinks button:hover{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}.productBadge{display:inline-flex;width:max-content;border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:999px;background:color-mix(in srgb,var(--accent) 16%,transparent);color:#e0fbff;font-size:12px;font-weight:950;padding:7px 10px;margin-bottom:12px}
+.productHero{min-height:520px;display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center;padding:50px 34px}.productHero h1{font-size:clamp(46px,5.3vw,82px);line-height:.88;letter-spacing:-.095em;margin-bottom:16px}.productHero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;background-clip:text;color:transparent}.productHero p,.productSection p{color:var(--siteSoft);line-height:1.6;font-size:15px}.productActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.productActions button,.productCard button,.productForm button{border:0;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-weight:950;padding:12px 16px}.productActions button:nth-child(2){background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.productVisual{border:1px solid rgba(255,255,255,.14);border-radius:26px;background:rgba(255,255,255,.075);padding:18px;box-shadow:0 24px 70px rgba(0,0,0,.32)}.productStat{border:1px solid rgba(255,255,255,.12);border-radius:17px;background:rgba(255,255,255,.06);padding:14px;margin-top:10px}.productStat strong{display:block;font-size:26px;letter-spacing:-.04em}.productStat span{color:#aebdda;font-size:12px}
+.productSection{padding:48px 34px;border-top:1px solid rgba(255,255,255,.10)}.productSection h2{font-size:38px;letter-spacing:-.065em;margin-bottom:10px}.productCards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.productCard{border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(255,255,255,.06);padding:20px}.productCard h3{margin-bottom:8px}.productCard button{margin-top:14px;font-size:13px;padding:10px 12px}.productProof,.productContact{display:grid;grid-template-columns:.85fr 1.15fr;gap:20px;align-items:start;background:rgba(255,255,255,.025)}.productReviews{display:grid;gap:11px}.productReview{border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.055);padding:15px}.productReview strong{color:#facc15}.productReview span{display:block;color:#93a4c0;font-size:12px;margin-top:8px}.productForm{display:grid;gap:10px;border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(255,255,255,.055);padding:18px}.productForm input,.productForm textarea{width:100%;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:rgba(255,255,255,.075);color:white;padding:12px;outline:none}.productForm textarea{min-height:100px}
+.siteStyle-futuristic{background:radial-gradient(circle at 80% 0%,rgba(139,92,246,.32),transparent 34%),radial-gradient(circle at 15% 20%,rgba(56,189,248,.22),transparent 28%),linear-gradient(135deg,#050b18,#0b2f5b)}
+.siteStyle-luxury{--accent:#facc15;--accent2:#f59e0b;--accent3:#fef3c7;background:radial-gradient(circle at 82% 0%,rgba(250,204,21,.23),transparent 34%),linear-gradient(135deg,#050505,#1c1307)}
+.siteStyle-clean{--accent:#22c55e;--accent2:#14b8a6;--accent3:#38bdf8;background:linear-gradient(135deg,#05201c,#0b2633)}
+.siteStyle-bold{--accent:#fb7185;--accent2:#d946ef;--accent3:#8b5cf6;background:radial-gradient(circle at 20% 10%,rgba(251,113,133,.28),transparent 34%),linear-gradient(135deg,#160713,#1a1640)}
+.siteStyle-minimal{--accent:#60a5fa;--accent2:#94a3b8;--accent3:#e5e7eb;background:linear-gradient(135deg,#0f172a,#111827)}
+.layout-centered .productHero{grid-template-columns:1fr;text-align:center}.layout-centered .productActions{justify-content:center}.layout-centered .productVisual{max-width:540px;margin:0 auto}
+.layout-cards .productHero{grid-template-columns:1fr}.layout-cards .productVisual{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.contentCalendar{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}.dayCard{border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.06);padding:10px;min-height:95px}.dayCard strong{color:#93e7ff;font-size:12px}.dayCard p{font-size:12px;margin-top:6px}.profileMock{border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(255,255,255,.06);padding:20px}.profileRow{display:flex;gap:12px;align-items:center}.profileAvatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:1000;font-size:24px}
+@media(max-width:850px){.productHero,.productProof,.productContact{grid-template-columns:1fr}.productCards,.contentCalendar{grid-template-columns:1fr}.productHero h1{font-size:44px}.layout-cards .productVisual{grid-template-columns:1fr}}
+
+@media(max-width:1250px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.nav{grid-template-columns:repeat(3,1fr)}.heroGrid,.generatorLayout,.outputMain,.leadGrid{grid-template-columns:1fr}.metrics,.reviewGrid,.salesGrid{grid-template-columns:repeat(2,1fr)}.pathTabs{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.main{padding:14px 12px 30px}.topbar{margin:-14px -12px 16px;padding:0 12px}.profile{display:none}.nav{grid-template-columns:1fr 1fr}.metrics,.reviewGrid,.salesGrid,.two{grid-template-columns:1fr}.hero h2{font-size:38px}.generatedProduct{height:auto;max-height:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">PP</div><div><h1>PathPay</h1><p>Clickable Bundle</p></div></div>
+    <nav class="nav">
+      <button class="active" data-jump="overview"><span class="ico">⌂</span>Overview</button>
+      <button data-jump="generator"><span class="ico">⚡</span>Generator</button>
+      <button data-jump="sales"><span class="ico">💬</span>Sell + Package</button>
+      <button data-jump="lead-finder"><span class="ico">⌕</span>Lead Finder</button>
+      <button data-jump="reviews"><span class="ico">★</span>Reviews</button>
+      <button data-jump="faq"><span class="ico">?</span>FAQ</button>
+    </nav>
+    <div class="sideBox">
+      <strong>Everything Clicks Now</strong>
+      <p>Dashboard nav scrolls. Path buttons switch products. Website navbar scrolls inside the generated website. Lead buttons load into generator.</p>
+      <button class="ghost full" data-jump="generator">Open Generator</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search"><span>⌕</span><input id="search" placeholder="Search leads, products, scripts..." /></div>
+      <div class="profile">
+        <div class="avatar">CH</div>
+        <div style="font-size:13px;line-height:1.2"><strong>Cameron Hunter</strong><br><span style="color:var(--muted);font-size:11px">Pro Member</span></div>
+        <button class="primary" data-jump="generator">+ Generate</button>
+      </div>
+    </header>
+
+    <section id="overview" class="heroGrid">
+      <div class="panel hero">
+        <div class="welcome">Welcome back, Cameron 👋</div>
+        <h2>PathPay <span class="grad">Clickable Generator</span></h2>
+        <p>This version uses real click handlers instead of broken preview buttons. Click the dashboard tabs, product tabs, generated website nav, lead finder buttons, copy buttons, and download buttons.</p>
+      </div>
+      <div class="panel cta">
+        <div><h3>⚡ Working Click Mode</h3><p>Use the filters, click Generate, then click around the generated product in the large preview.</p></div>
+        <div class="action-row"><button class="primary" data-jump="generator">Open Generator</button><button class="ghost" id="randomizeBtn">Randomize</button></div>
+      </div>
+    </section>
+
+    <section class="metrics">
+      <div class="metric"><small>Generated Products</small><strong id="mProducts">156</strong><span>+28% this week</span></div>
+      <div class="metric"><small>Click System</small><strong>Fixed</strong><span>tabs + nav work</span></div>
+      <div class="metric"><small>Paths Included</small><strong>5</strong><span>all switchable</span></div>
+      <div class="metric"><small>Starter Price</small><strong>$299</strong><span>package guidance</span></div>
+      <div class="metric"><small>Leads Found</small><strong id="mLeads">1,248</strong><span>+32% this week</span></div>
+    </section>
+
+    <section id="generator" class="section panel">
+      <div class="sectionTitle">
+        <div><h2>Clickable Working Generator</h2><p>Switch product type, change filters, generate, then click inside the generated product.</p></div>
+        <button class="small" id="downloadProductBtn">Download Product HTML</button>
+      </div>
+      <div class="generator">
+        <div class="pathTabs">
+          <button class="active" data-path="website">🌐 Website</button>
+          <button data-path="content">📲 Content</button>
+          <button data-path="profile">📍 Profile</button>
+          <button data-path="review">⭐ Reviews</button>
+          <button data-path="lead">🧲 Lead Magnet</button>
+        </div>
+
+        <div class="generatorLayout">
+          <div class="formPanel">
+            <h3 id="formTitle">🌐 AI Website Builder</h3>
+            <p id="formHelp" class="muted" style="margin-top:5px">Generate a full futuristic website that changes based on the filters.</p>
+
+            <label>Business Name</label><input id="businessName" value="Northvale Construction" />
+            <div class="two">
+              <div><label>Business Type</label><select id="businessType"><option>Roofing</option><option>Med Spa</option><option>Barbershop</option><option>Restaurant</option><option>Gym</option><option>Landscaping</option><option>Dental Office</option><option>Auto Detailing</option><option>Real Estate</option></select></div>
+              <div><label>City / State</label><input id="location" value="Los Angeles, CA" /></div>
+            </div>
+
+            <label>Main Offer / Goal</label><input id="offer" value="Book more free roof inspections" />
+
+            <div class="two">
+              <div><label>Brand Tone</label><select id="tone"><option>Professional</option><option>Luxury</option><option>Bold</option><option>Friendly</option><option>Simple</option></select></div>
+              <div><label>Package Price</label><select id="priceTier"><option>$299 starter</option><option>$499 standard</option><option>$799 premium</option><option>$1,200+ custom</option></select></div>
+            </div>
+
+            <div class="two">
+              <div><label>Website Style</label><select id="siteStyle"><option value="futuristic">Futuristic Neon</option><option value="luxury">Luxury Dark</option><option value="clean">Clean Local</option><option value="bold">Bold Modern</option><option value="minimal">Minimal Pro</option></select></div>
+              <div><label>Website Layout</label><select id="siteLayout"><option value="split">Split Hero</option><option value="centered">Centered Hero</option><option value="cards">Card-Based Hero</option></select></div>
+            </div>
+
+            <div class="two">
+              <div><label>CTA Button</label><input id="ctaText" value="Get A Free Quote" /></div>
+              <div><label>Section Count</label><select id="sectionCount"><option>4 sections</option><option>5 sections</option><option>6 sections</option></select></div>
+            </div>
+
+            <label>Notes</label><textarea id="notes">Local business wants more calls, better trust, and a cleaner online presence.</textarea>
+
+            <div class="action-row">
+              <button class="primary full" id="generateBtn">Generate Product</button>
+              <button class="ghost" id="randomizeBtn2">Randomize</button>
+              <button class="ghost" id="demoBtn">Demo Fill</button>
+            </div>
+          </div>
+
+          <div class="outputMain">
+            <div class="liveProduct">
+              <div class="previewHead"><strong id="previewTitle">Generated Website</strong><span class="tag high">Click inside below</span></div>
+              <div id="generatedProduct" class="generatedProduct"></div>
+            </div>
+            <div class="outputPanel">
+              <div class="previewHead"><strong>Generated Assets</strong><button class="small" id="copyAssetsBtn">Copy</button></div>
+              <div id="assetsBox" class="assetsBox"></div>
+              <div class="action-row">
+                <button class="small" id="downloadAssetsBtn">Download Assets</button>
+                <button class="small" id="downloadProductBtn2">Download Product HTML</button>
+                <button class="small" id="openProductBtn">Open Fullscreen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sales" class="section panel">
+      <div class="sectionTitle"><div><h2>How To Sell, Package, and Prepare</h2><p>This stays separate from the generated product so the preview stays clean and big.</p></div><button class="small" id="downloadSalesBtn">Download Sales System</button></div>
+      <div id="salesGrid" class="salesGrid"></div>
+    </section>
+
+    <section id="lead-finder" class="section panel">
+      <div class="sectionTitle"><div><h2>Lead Finder</h2><p>Every button here works: use lead, make pitch, Google, Maps, export.</p></div><button class="small" id="exportLeadsBtn">Export Leads</button></div>
+      <div class="leadGrid">
+        <div class="toolPanel">
+          <div class="two"><div><label>State</label><select id="leadState"></select></div><div><label>City</label><select id="leadCity"></select></div></div>
+          <label>Business Category</label><select id="leadCategory"><option>Roofing</option><option>Med Spa</option><option>Barbershop</option><option>Restaurant</option><option>Gym</option><option>Landscaping</option><option>Dental Office</option><option>Auto Detailing</option><option>Real Estate</option></select>
+          <label>Best Kit To Sell</label><select id="leadKit"><option>AI Website Builder</option><option>AI Review Booster</option><option>AI Content Pack</option><option>AI Business Profile Upgrade</option><option>AI Lead Magnet</option></select>
+          <div class="action-row"><button class="primary" id="findLeadsBtn">Find Leads</button><button class="ghost" id="clearLeadsBtn">Clear</button></div>
+          <label>Selected Lead Pitch</label><div id="leadPitch" class="assetsBox" style="min-height:170px">No lead selected yet.</div><button class="small" id="copyLeadPitchBtn">Copy Lead Pitch</button>
+        </div>
+        <div id="leadResults" class="leadResults"></div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section panel">
+      <div class="sectionTitle"><div><h2>Reviews & Results</h2><p>Trust section for the bundle dashboard.</p></div></div>
+      <div class="reviewGrid">
+        <div class="review"><div class="person"><div class="face">JM</div><div><strong>Jessica Martinez</strong><br><small style="color:var(--muted)">Digital Marketer</small></div></div><div class="stars">★★★★★</div><p>“Now the website nav and dashboard buttons actually click around.”</p><div class="result"><span>$4,800 generated</span><span>+42%</span></div></div>
+        <div class="review"><div class="person"><div class="face">DK</div><div><strong>Daniel Kim</strong><br><small style="color:var(--muted)">Agency Owner</small></div></div><div class="stars">★★★★★</div><p>“The path buttons switch products and the lead finder loads businesses into the generator.”</p><div class="result"><span>62% review lift</span><span>+62%</span></div></div>
+        <div class="review"><div class="person"><div class="face">TB</div><div><strong>Tyler Brooks</strong><br><small style="color:var(--muted)">Freelancer</small></div></div><div class="stars">★★★★★</div><p>“It finally feels like a real product instead of a static mockup.”</p><div class="result"><span>18 deals closed</span><span>+36%</span></div></div>
+      </div>
+    </section>
+
+    <section id="faq" class="section panel">
+      <div class="sectionTitle"><div><h2>FAQ</h2><p>Common questions from members.</p></div></div>
+      <div class="faq">
+        <details open><summary>What can I click?</summary><p>Dashboard nav, product type tabs, generated website nav, service buttons, contact buttons, lead buttons, copy buttons, and download buttons.</p></details>
+        <details><summary>Does the generated website change?</summary><p>Yes. Change style, layout, business type, offer, CTA, or section count and click Generate.</p></details>
+        <details><summary>Where are the sales steps?</summary><p>Under “How To Sell, Package, and Prepare,” separate from the generated product preview.</p></details>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast">Done</div>
+
+<script>
+const pathInfo = {
+  website:{title:'AI Website Builder',icon:'🌐',preview:'Generated Website',help:'Generate a full futuristic website that changes based on the filters.'},
+  content:{title:'AI Content Pack',icon:'📲',preview:'Generated Content Pack',help:'Generate a clickable content calendar, captions, and reel scripts.'},
+  profile:{title:'AI Profile Upgrade',icon:'📍',preview:'Generated Profile Upgrade',help:'Generate a clickable business profile upgrade pack.'},
+  review:{title:'AI Review Booster',icon:'⭐',preview:'Generated Review System',help:'Generate a clickable review booster system.'},
+  lead:{title:'AI Lead Magnet',icon:'🧲',preview:'Generated Lead Magnet',help:'Generate a clickable lead magnet landing page and email sequence.'}
+};
+const stateCities={'Ohio':['Cincinnati','Mason','Columbus','Cleveland','Dayton','Oxford'],'California':['Los Angeles','San Diego','San Francisco','Sacramento','San Jose'],'Florida':['Miami','Tampa','Orlando','Jacksonville','Fort Lauderdale'],'Texas':['Austin','Dallas','Houston','San Antonio','Fort Worth'],'New York':['New York City','Buffalo','Rochester','Albany','Syracuse']};
+const catData={
+  'Roofing':{names:['Summit Roof Co.','Apex Roofing Pros','Blue Ridge Roofers','Premier Roof Masters','Local Shield Roofing'],offer:'Book more roof inspections',pain:'weak website, low review trust, and not enough quote requests'},
+  'Med Spa':{names:['Glow Haus Aesthetics','Pure Skin Studio','Radiance Med Spa','Luxe Laser Lounge','Brightline Aesthetics'],offer:'Book more consultation calls',pain:'needs premium content, trust, and a better profile'},
+  'Barbershop':{names:['Prime Cut Barbers','Fade Room Studio','Crown & Clippers','The Local Barber Co.','Sharp Line Barbers'],offer:'Fill more weekly appointments',pain:'needs more local visibility and simple booking'},
+  'Restaurant':{names:['Oak Street Kitchen','Bistro 27','The Local Table','Firehouse Grill','Harvest Bowl Cafe'],offer:'Bring in more local customers',pain:'needs better content and a stronger review flow'},
+  'Gym':{names:['Iron Pulse Gym','NextRep Fitness','Peak Form Studio','StrongHouse Training','Core Lab Fitness'],offer:'Get more free trial signups',pain:'needs lead magnets and follow-up'},
+  'Landscaping':{names:['Blue Oak Landscaping','Greenline Lawn Co.','Summit Yard Care','Fresh Cut Pros','Curb Appeal Crew'],offer:'Book more monthly lawn care clients',pain:'needs a cleaner offer and local lead flow'},
+  'Dental Office':{names:['Bright Smile Dental','Oak Valley Dental','PureCare Dentistry','Modern Smile Studio','Northside Family Dental'],offer:'Book more new patient appointments',pain:'needs trust-building profile copy and reviews'},
+  'Auto Detailing':{names:['GlossLab Detailing','Prime Shine Auto','Ceramic Pro Studio','Mirror Finish Detail','Elite Wash Garage'],offer:'Sell more detail packages',pain:'needs visual content and stronger offers'},
+  'Real Estate':{names:['Metro Key Realty','Horizon Homes Group','Prime House Partners','Local Nest Realty','Avenue Realty Co.'],offer:'Capture more buyer and seller leads',pain:'needs lead magnets and social proof'}
+};
+let currentPath='website', productHTML='', productAssets='', salesSystem={}, leads=[], generationCount=156;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const slug=s=>(s||'pathpay').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'pathpay';
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
+function scrollToSection(id){const el=$(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'});}
+function vals(){
+  return {
+    name:$('businessName').value.trim()||'Your Business',type:$('businessType').value,location:$('location').value.trim()||'Your City',
+    offer:$('offer').value.trim()||'Get more customers',tone:$('tone').value,price:$('priceTier').value,style:$('siteStyle').value,
+    layout:$('siteLayout').value,cta:$('ctaText').value.trim()||'Get Started',sections:$('sectionCount').value,notes:$('notes').value.trim()
+  };
+}
+function setPath(p){
+  currentPath=p;
+  document.querySelectorAll('[data-path]').forEach(b=>b.classList.toggle('active',b.dataset.path===p));
+  $('formTitle').textContent=pathInfo[p].icon+' '+pathInfo[p].title;
+  $('formHelp').textContent=pathInfo[p].help;
+  $('previewTitle').textContent=pathInfo[p].preview;
+  generate();
+}
+function scrollProduct(id){
+  const root=$('generatedProduct');
+  const el=document.getElementById(id);
+  if(el && root){root.scrollTo({top:el.offsetTop-10,behavior:'smooth'});}
+}
+function serviceNames(type){
+  const map={
+    'Roofing':['Roof Inspection','Roof Repair','Full Roof Replacement'],'Med Spa':['Skin Consultation','Treatment Plan','Laser / Injectable Service'],
+    'Barbershop':['Signature Cut','Fade + Beard Trim','Membership Booking'],'Restaurant':['Online Ordering','Private Events','Weekly Specials'],
+    'Gym':['Free Trial','Personal Training','Transformation Program'],'Landscaping':['Lawn Care','Landscape Design','Monthly Maintenance'],
+    'Dental Office':['New Patient Exam','Cleaning Package','Cosmetic Consultation'],'Auto Detailing':['Interior Detail','Ceramic Coating','Full Detail Package'],
+    'Real Estate':['Home Valuation','Buyer Consultation','Listing Strategy']
+  };
+  return map[type]||['Consultation','Main Service','Follow-Up Support'];
+}
+function trustLines(type){
+  const map={
+    'Roofing':['Licensed local crew','Storm damage support','Clear project timeline'],'Med Spa':['Premium client experience','Before/after trust assets','Consultation-first booking'],
+    'Barbershop':['Easy booking flow','Fresh cuts every week','Local regulars'],'Restaurant':['Local favorites','Fast ordering','Review-focused reputation'],
+    'Gym':['Trial signups','Transformation proof','Simple membership CTA'],'Landscaping':['Curb appeal focused','Recurring service plans','Fast quote process'],
+    'Dental Office':['Patient-first care','Trust-building FAQs','New patient flow'],'Auto Detailing':['Visual proof','Package pricing','Premium finish'],
+    'Real Estate':['Lead capture','Local market trust','Buyer/seller CTAs']
+  };
+  return map[type]||['Fast response','Trusted service','Clear pricing'];
+}
+function productNav(items){
+  return `<div class="productTop"><div class="productLogo">${esc(vals().name)}</div><div class="productLinks">${items.map(i=>`<button data-product-target="${i.id}">${i.label}</button>`).join('')}</div></div>`;
+}
+function makeWebsite(v){
+  const services=serviceNames(v.type), trust=trustLines(v.type);
+  const layoutClass=v.layout==='centered'?'layout-centered':v.layout==='cards'?'layout-cards':'layout-split';
+  const extra=v.sections==='5 sections'||v.sections==='6 sections', extra2=v.sections==='6 sections';
+  return `<div class="productWrap siteStyle-${v.style} ${layoutClass}">
+    ${productNav([{id:'site-home',label:'Home'},{id:'site-services',label:'Services'},{id:'site-proof',label:'Proof'},...(extra?[{id:'site-process',label:'Process'}]:[]),...(extra2?[{id:'site-pricing',label:'Pricing'}]:[]),{id:'site-contact',label:'Contact'}])}
+    <section id="site-home" class="productHero"><div><span class="productBadge">${esc(v.tone)} ${esc(v.type)} Website</span><h1>${esc(v.name)} helps you <span>${esc(v.offer.toLowerCase())}</span></h1><p>${esc(v.name)} is a ${esc(v.type.toLowerCase())} business in ${esc(v.location)} built around trust, speed, and a professional customer experience.</p><div class="productActions"><button data-product-target="site-contact">${esc(v.cta)}</button><button data-product-target="site-services">View Services</button></div></div><div class="productVisual"><h3>Business Snapshot</h3><div class="productStat"><strong>${v.style==='luxury'?'Premium':'4.9★'}</strong><span>${v.style==='luxury'?'Brand positioning':'Average customer rating'}</span></div><div class="productStat"><strong>${esc(v.tone)}</strong><span>Brand tone</span></div><div class="productStat"><strong>${esc(v.location)}</strong><span>Local service area</span></div></div></section>
+    <section id="site-services" class="productSection"><span class="productBadge">Services</span><h2>${esc(v.type)} services built to convert</h2><p>This section changes based on the business type so every generated site feels custom.</p><div class="productCards">${services.map((s,i)=>`<div class="productCard"><h3>${esc(s)}</h3><p>${i===0?'Give customers a simple first step and make the offer easy to understand.':i===1?'Package the main service around the goal: '+esc(v.offer.toLowerCase())+'.':'Add a higher-value offer that makes the business look more professional.'}</p><button data-product-target="site-contact">${i===0?'Book This':i===1?'Get Pricing':'Ask About This'}</button></div>`).join('')}</div></section>
+    <section id="site-proof" class="productSection productProof"><div><span class="productBadge">Trust</span><h2>Why customers choose ${esc(v.name)}</h2><p>Use this area for reviews, before/after proof, results, guarantees, or trust badges.</p></div><div class="productReviews">${trust.map(t=>`<div class="productReview"><strong>★★★★★</strong><p>“${esc(t)}. Professional from start to finish.”</p><span>— Local Customer</span></div>`).join('')}</div></section>
+    ${extra?`<section id="site-process" class="productSection"><span class="productBadge">Process</span><h2>A simple 3-step process</h2><div class="productCards"><div class="productCard"><h3>1. Request</h3><p>Customer submits their info through the site.</p></div><div class="productCard"><h3>2. Confirm</h3><p>${esc(v.name)} follows up with a clear next step.</p></div><div class="productCard"><h3>3. Deliver</h3><p>The service is completed with professional communication.</p></div></div></section>`:''}
+    ${extra2?`<section id="site-pricing" class="productSection"><span class="productBadge">Packages</span><h2>Simple package options</h2><div class="productCards"><div class="productCard"><h3>Starter</h3><p>Best for a quick first step.</p><button data-product-target="site-contact">Ask For Price</button></div><div class="productCard"><h3>Standard</h3><p>Most popular service package.</p><button data-product-target="site-contact">Get Quote</button></div><div class="productCard"><h3>Premium</h3><p>Highest-value option for serious customers.</p><button data-product-target="site-contact">Apply Now</button></div></div></section>`:''}
+    <section id="site-contact" class="productSection productContact"><div><span class="productBadge">Contact</span><h2>Ready to get started?</h2><p>Contact ${esc(v.name)} today to ${esc(v.offer.toLowerCase())}. This form is a preview of the client lead capture section.</p></div><form class="productForm" data-demo-form><input placeholder="Full Name" /><input placeholder="Email Address" /><input placeholder="Phone Number" /><textarea placeholder="What do you need help with?"></textarea><button>${esc(v.cta)}</button></form></section>
+  </div>`;
+}
+function makeContent(v){
+  const days=Array.from({length:30},(_,i)=>`<div class="dayCard"><strong>Day ${i+1}</strong><p>${['Reel','Carousel','Story','Photo','Testimonial','FAQ'][i%6]}: ${esc(v.offer)}</p></div>`).join('');
+  return `<div class="productWrap siteStyle-futuristic">${productNav([{id:'content-calendar',label:'Calendar'},{id:'content-captions',label:'Captions'},{id:'content-reels',label:'Reels'},{id:'content-delivery',label:'Delivery'}])}<section id="content-calendar" class="productSection"><span class="productBadge">30-Day Plan</span><h2>${esc(v.name)} Content Calendar</h2><p>Generated social media plan for ${esc(v.type)} in ${esc(v.location)}.</p><div class="contentCalendar">${days}</div></section><section id="content-captions" class="productSection"><h2>Captions</h2><div class="productCards"><div class="productCard"><p>${esc(v.name)} helps ${esc(v.location)} customers ${esc(v.offer.toLowerCase())}. Message us today.</p></div><div class="productCard"><p>Need ${esc(v.type.toLowerCase())} help? ${esc(v.name)} makes it simple.</p></div><div class="productCard"><p>Save this before booking your next ${esc(v.type.toLowerCase())} service.</p></div></div></section><section id="content-reels" class="productSection"><h2>Reel Script</h2><p>Hook: If you live in ${esc(v.location)}, watch this before booking ${esc(v.type.toLowerCase())} help. Body: show the problem, solution, proof. CTA: Message ${esc(v.name)}.</p></section><section id="content-delivery" class="productSection"><h2>Delivery</h2><p>Deliver as a PDF, Google Doc, or Canva board.</p></section></div>`;
+}
+function makeProfile(v){
+  return `<div class="productWrap siteStyle-clean">${productNav([{id:'profile-main',label:'Profile'},{id:'profile-bio',label:'Bio'},{id:'profile-faq',label:'FAQs'},{id:'profile-replies',label:'Replies'}])}<section id="profile-main" class="productHero"><div><span class="productBadge">Business Profile</span><h1>${esc(v.name)} <span>Profile Upgrade</span></h1><p>4.8 ★★★★★ · ${esc(v.type)} · ${esc(v.location)}</p></div><div class="profileMock"><div class="profileRow"><div class="profileAvatar">${esc(v.name[0]||'B')}</div><div><h2>${esc(v.name)}</h2><p>Open now · Verified profile</p></div></div></div></section><section id="profile-bio" class="productSection"><h2>Bio</h2><p>Trusted ${esc(v.type)} service in ${esc(v.location)}. Fast response, clear pricing, and quality work.</p></section><section id="profile-faq" class="productSection"><h2>FAQs</h2><div class="productCards"><div class="productCard"><h3>How do I start?</h3><p>Contact ${esc(v.name)} for a quote.</p></div><div class="productCard"><h3>Do you serve ${esc(v.location)}?</h3><p>Yes.</p></div><div class="productCard"><h3>Why choose us?</h3><p>Clear communication and reliable service.</p></div></div></section><section id="profile-replies" class="productSection"><h2>Review Replies</h2><p>Positive: Thank you for choosing ${esc(v.name)}! Negative: Thank you for the feedback. Please contact us directly so we can make this right.</p></section></div>`;
+}
+function makeReview(v){
+  return `<div class="productWrap siteStyle-luxury">${productNav([{id:'review-card',label:'QR Card'},{id:'review-sms',label:'SMS'},{id:'review-email',label:'Email'},{id:'review-staff',label:'Staff'}])}<section id="review-card" class="productHero"><div><span class="productBadge">Review System</span><h1>Get more <span>5-star reviews</span></h1><p>Review booster system for ${esc(v.name)}.</p><div class="productActions"><button data-product-target="review-sms">View SMS</button><button data-product-target="review-email">View Email</button></div></div><div class="productVisual"><h3>QR Review Card</h3><p>Loved your experience? Scan here to leave a quick review.</p></div></section><section id="review-sms" class="productSection"><h2>SMS Script</h2><p>Hi [First Name], this is ${esc(v.name)}. If you have 30 seconds, would you mind leaving us a quick review?</p></section><section id="review-email" class="productSection"><h2>Email Script</h2><p>Subject: Quick favor from ${esc(v.name)}. Thank you for choosing us. A quick review would really help.</p></section><section id="review-staff" class="productSection"><h2>Staff Steps</h2><div class="productCards"><div class="productCard"><h3>Ask</h3><p>Ask happy customers within 24 hours.</p></div><div class="productCard"><h3>Send</h3><p>Send review link by text.</p></div><div class="productCard"><h3>Follow Up</h3><p>Follow up once after 2 days.</p></div></div></section></div>`;
+}
+function makeLead(v){
+  return `<div class="productWrap siteStyle-bold">${productNav([{id:'lead-landing',label:'Landing'},{id:'lead-guide',label:'Guide'},{id:'lead-emails',label:'Emails'},{id:'lead-promo',label:'Promo'}])}<section id="lead-landing" class="productHero"><div><span class="productBadge">Free Guide</span><h1>Free ${esc(v.type)} checklist for <span>${esc(v.location)}</span></h1><p>Download a quick checklist from ${esc(v.name)} before booking your next service.</p><div class="productActions"><button data-product-target="lead-guide">Download Guide</button><button data-product-target="lead-emails">View Follow-Up</button></div></div><div class="productVisual"><h3>Lead Capture</h3><p>Name, email, phone, and CTA flow.</p></div></section><section id="lead-guide" class="productSection"><h2>Checklist</h2><div class="productCards"><div class="productCard"><h3>Questions</h3><p>Know what to ask before hiring.</p></div><div class="productCard"><h3>Red Flags</h3><p>What to avoid before paying.</p></div><div class="productCard"><h3>Quote Checklist</h3><p>What a quality quote includes.</p></div></div></section><section id="lead-emails" class="productSection"><h2>Email Sequence</h2><p>Email 1: Here is your checklist. Email 2: Need help with ${esc(v.offer.toLowerCase())}? Email 3: Still deciding?</p></section><section id="lead-promo" class="productSection"><h2>Social Promo</h2><p>Before you hire a ${esc(v.type.toLowerCase())} company in ${esc(v.location)}, grab this free checklist from ${esc(v.name)}.</p></section></div>`;
+}
+function buildAssets(v){
+  return `GENERATED ASSETS
+
+Product Path: ${pathInfo[currentPath].title}
+Client: ${v.name}
+Business Type: ${v.type}
+Location: ${v.location}
+Offer: ${v.offer}
+Tone: ${v.tone}
+Website Style: ${v.style}
+Website Layout: ${v.layout}
+CTA: ${v.cta}
+Sections: ${v.sections}
+Suggested Price: ${v.price}
+
+WHAT WORKS:
+• Dashboard navigation
+• Product path tabs
+• Generated product navigation
+• Buttons inside generated product
+• Lead finder buttons
+• Copy/download buttons
+
+KEY CLIENT COPY:
+${v.name} helps customers in ${v.location} ${v.offer.toLowerCase()} with a cleaner, more trusted online presence.
+
+NOTES:
+${v.notes}`;
+}
+function buildSales(v){
+  return {
+    sell:`HOW TO SELL THIS
+
+1. Find a business with a weak online presence.
+2. Generate a preview using their business name and city.
+3. Click through the product to make sure it fits.
+4. Send a short message offering to show the preview.
+5. Sell the outcome, not the dashboard.
+6. Start at ${v.price} depending on setup and edits.`,
+    pitch:`PITCH SCRIPT
+
+Hey ${v.name} team — I was checking out local ${v.type.toLowerCase()} businesses in ${v.location} and noticed a quick opportunity.
+
+I put together a ${pathInfo[currentPath].title.replace('AI ','').toLowerCase()} preview that could help you ${v.offer.toLowerCase()}.
+
+Want me to send over the preview?`,
+    follow:`FOLLOW-UP
+
+Hey, just following up on the preview.
+
+I think this could be a simple win for ${v.name}, especially if you want to ${v.offer.toLowerCase()}.
+
+Want me to send the quick preview?`,
+    package:`HOW TO PACKAGE IT
+
+Starter (${v.price}):
+• Generated product preview
+• Basic customization
+• Copy/scripts included
+• 1 revision
+
+Standard:
+• Full customization
+• Delivery document
+• Follow-up scripts
+• 2 revisions
+
+Premium:
+• Final product + setup help
+• Extra variations
+• Launch/delivery walkthrough`,
+    prepare:`PREPARE + DELIVER
+
+[ ] Generate product
+[ ] Click through preview
+[ ] Customize wording
+[ ] Download HTML/assets
+[ ] Send preview to client
+[ ] Make edits
+[ ] Deliver final link/files
+[ ] Ask for testimonial/referral`
+  }
+}
+function renderSales(){
+  $('salesGrid').innerHTML=Object.entries(salesSystem).map(([k,v])=>`<div class="salesCard"><h3>${k==='sell'?'How To Sell':k==='pitch'?'Pitch Script':k==='follow'?'Follow Up':k==='package'?'Package It':'Prepare + Deliver'}</h3><pre>${esc(v)}</pre><button class="small" data-copy="${esc(v)}">Copy</button></div>`).join('');
+}
+function generate(){
+  const v=vals();
+  const makers={website:makeWebsite,content:makeContent,profile:makeProfile,review:makeReview,lead:makeLead};
+  const html=makers[currentPath](v);
+  $('generatedProduct').innerHTML=html;
+  productAssets=buildAssets(v);
+  $('assetsBox').textContent=productAssets;
+  salesSystem=buildSales(v);
+  renderSales();
+  productHTML=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(v.name)} ${esc(pathInfo[currentPath].title)}</title><style>${getStandaloneCSS()}</style></head><body>${html}<script>${standaloneClickScript()}<\/script></body></html>`;
+  generationCount++; $('mProducts').textContent=String(generationCount);
+  toast('Product generated — click around now');
+}
+function getStandaloneCSS(){
+  const style=document.querySelector('style').innerHTML;
+  const start=style.indexOf('/* GENERATED PRODUCT STYLES */');
+  const end=style.indexOf('@media(max-width:1250px)');
+  return style.slice(start,end).replaceAll("var(--blue)","#38bdf8").replaceAll("var(--purple)","#8b5cf6").replaceAll("var(--pink)","#d946ef").replaceAll("var(--yellow)","#facc15");
+}
+function standaloneClickScript(){
+  return `document.addEventListener('click',function(e){const b=e.target.closest('[data-product-target]');if(b){const el=document.getElementById(b.dataset.productTarget);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}const f=e.target.closest('[data-demo-form]');if(f&&e.target.tagName==='BUTTON'){e.preventDefault();alert('Demo form submitted');}});`;
+}
+function downloadFile(name,content,mime='text/plain'){const blob=new Blob([content],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function copyText(t){navigator.clipboard.writeText(t);toast('Copied')}
+function downloadProduct(){downloadFile(`${slug(vals().name)}-${currentPath}-product.html`,productHTML,'text/html')}
+function downloadAssets(){downloadFile(`${slug(vals().name)}-${currentPath}-assets.txt`,productAssets)}
+function openProduct(){const blob=new Blob([productHTML],{type:'text/html'});window.open(URL.createObjectURL(blob),'_blank')}
+function downloadSales(){downloadFile(`${slug(vals().name)}-${currentPath}-sales-system.txt`,Object.values(salesSystem).join('\n\n---\n\n'))}
+function demoFill(){
+  $('businessName').value='Brightline Med Spa';$('businessType').value='Med Spa';$('location').value='Cincinnati, OH';$('offer').value='Book more skin consultations';$('tone').value='Luxury';$('priceTier').value='$799 premium';$('siteStyle').value='luxury';$('siteLayout').value='split';$('ctaText').value='Book A Consultation';$('sectionCount').value='6 sections';$('notes').value='Needs premium content, trust, and a stronger online presence.';setPath('website');
+}
+function randomize(){
+  const samples=[
+    ['Summit Roof Co.','Roofing','Mason, OH','Book more roof inspections','Professional','$799 premium','clean','split','Get A Free Roof Quote','5 sections'],
+    ['Prime Cut Barbers','Barbershop','Austin, TX','Fill more weekly appointments','Bold','$499 standard','bold','cards','Book Your Cut','4 sections'],
+    ['Glow Haus Aesthetics','Med Spa','Miami, FL','Book more consultation calls','Luxury','$799 premium','luxury','centered','Book A Consultation','6 sections'],
+    ['Blue Oak Landscaping','Landscaping','Tampa, FL','Get more monthly lawn care clients','Friendly','$499 standard','clean','split','Get A Lawn Quote','5 sections'],
+    ['Iron Pulse Gym','Gym','Columbus, OH','Get more free trial signups','Bold','$299 starter','futuristic','cards','Start Free Trial','6 sections']
+  ];
+  const s=samples[Math.floor(Math.random()*samples.length)];
+  $('businessName').value=s[0];$('businessType').value=s[1];$('location').value=s[2];$('offer').value=s[3];$('tone').value=s[4];$('priceTier').value=s[5];$('siteStyle').value=s[6];$('siteLayout').value=s[7];$('ctaText').value=s[8];$('sectionCount').value=s[9];generate();
+}
+function initStates(){const st=$('leadState');st.innerHTML=Object.keys(stateCities).map(s=>`<option>${s}</option>`).join('');st.value='Ohio';updateCities();}
+function updateCities(){const c=stateCities[$('leadState').value]||[];$('leadCity').innerHTML=c.map(x=>`<option>${x}</option>`).join('');}
+function kitPath(k){if(k.includes('Website'))return'website';if(k.includes('Content'))return'content';if(k.includes('Profile'))return'profile';if(k.includes('Review'))return'review';return'lead'}
+function findLeads(){
+  const state=$('leadState').value, city=$('leadCity').value, cat=$('leadCategory').value, kit=$('leadKit').value, d=catData[cat];
+  leads=d.names.map((name,i)=>({id:i,name:i===0&&city==='Mason'?`${city} ${cat} Co.`:name,category:cat,city,state,kit,rating:[2.7,3.1,3.6,4.0,2.9][i],reviews:[12,24,48,96,18][i],opp:['High','Medium','Medium','Low','High'][i],score:[92,78,73,55,88][i],pain:d.pain,offer:d.offer,address:`${100+i*37} ${['Main St','Market Ave','Oak Rd','Center Blvd','Highland Dr'][i]}, ${city}, ${state}`}));
+  renderLeads();$('mLeads').textContent=String(1248+leads.length);toast('Leads found');
+}
+function renderLeads(){
+  $('leadResults').innerHTML=leads.map(l=>{const cls=l.opp==='High'?'high':l.opp==='Medium'?'med':'low',q=encodeURIComponent(`${l.name} ${l.city} ${l.state}`);return `<div class="leadCard"><div><h4>${esc(l.name)}</h4><p>${esc(l.category)} · ${esc(l.address)}<br>${l.rating} ★ · ${l.reviews} reviews<br>Pain: ${esc(l.pain)}</p><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><span class="tag ${cls}">${l.opp}</span><span class="tag high">Score ${l.score}</span><span class="tag med">${esc(l.kit)}</span></div><div class="action-row"><button class="small" data-use-lead="${l.id}">Use In Generator</button><button class="small" data-pitch-lead="${l.id}">Make Pitch</button><a class="small" target="_blank" href="https://www.google.com/search?q=${q}">Google</a><a class="small" target="_blank" href="https://www.google.com/maps/search/${q}">Maps</a></div></div><div><span class="tag ${cls}">${l.opp}</span></div></div>`}).join('');
+}
+function useLead(id){
+  const l=leads.find(x=>x.id===id); if(!l) return;
+  $('businessName').value=l.name; $('businessType').value=l.category; $('location').value=`${l.city}, ${l.state}`; $('offer').value=l.offer; $('notes').value=`Lead score ${l.score}. Rating ${l.rating} stars with ${l.reviews} reviews. Pain point: ${l.pain}.`;
+  if(l.category==='Med Spa'){$('siteStyle').value='luxury';$('tone').value='Luxury';$('ctaText').value='Book A Consultation'}
+  else if(l.category==='Barbershop'||l.category==='Gym'){$('siteStyle').value='bold';$('tone').value='Bold'}
+  else if(l.category==='Roofing'||l.category==='Landscaping'){$('siteStyle').value='clean';$('tone').value='Professional'}
+  else {$('siteStyle').value='minimal';$('tone').value='Professional'}
+  setPath(kitPath(l.kit)); scrollToSection('generator'); toast('Lead loaded into generator');
+}
+function makeLeadPitch(id){
+  const l=leads.find(x=>x.id===id); if(!l) return;
+  const text=`Hey ${l.name} team — I noticed a quick opportunity for your ${l.category.toLowerCase()} business in ${l.city}. I made a ${l.kit.replace('AI ','').toLowerCase()} preview that could help you ${l.offer.toLowerCase()}. Want me to send it over?`;
+  $('leadPitch').textContent=text; copyText(text);
+}
+function exportLeads(){downloadFile('pathpay-leads.txt',leads.map(l=>`${l.name} - ${l.category} - ${l.city}, ${l.state} - ${l.opp} - ${l.kit}`).join('\n'))}
+function clearLeads(){leads=[];$('leadResults').innerHTML='<div class="toolPanel">No leads yet.</div>';}
+document.addEventListener('click', e=>{
+  const jump=e.target.closest('[data-jump]'); if(jump){scrollToSection(jump.dataset.jump); document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.jump===jump.dataset.jump));}
+  const path=e.target.closest('[data-path]'); if(path){setPath(path.dataset.path);}
+  const product=e.target.closest('[data-product-target]'); if(product){scrollProduct(product.dataset.productTarget);}
+  const copy=e.target.closest('[data-copy]'); if(copy){copyText(copy.dataset.copy);}
+  const use=e.target.closest('[data-use-lead]'); if(use){useLead(Number(use.dataset.useLead));}
+  const pitch=e.target.closest('[data-pitch-lead]'); if(pitch){makeLeadPitch(Number(pitch.dataset.pitchLead));}
+  const form=e.target.closest('[data-demo-form]'); if(form && e.target.tagName==='BUTTON'){e.preventDefault(); toast('Demo form submitted');}
+});
+$('generateBtn').addEventListener('click',generate);
+$('randomizeBtn').addEventListener('click',randomize);
+$('randomizeBtn2').addEventListener('click',randomize);
+$('demoBtn').addEventListener('click',demoFill);
+$('downloadProductBtn').addEventListener('click',downloadProduct);
+$('downloadProductBtn2').addEventListener('click',downloadProduct);
+$('copyAssetsBtn').addEventListener('click',()=>copyText(productAssets));
+$('downloadAssetsBtn').addEventListener('click',downloadAssets);
+$('openProductBtn').addEventListener('click',openProduct);
+$('downloadSalesBtn').addEventListener('click',downloadSales);
+$('findLeadsBtn').addEventListener('click',findLeads);
+$('clearLeadsBtn').addEventListener('click',clearLeads);
+$('exportLeadsBtn').addEventListener('click',exportLeads);
+$('copyLeadPitchBtn').addEventListener('click',()=>copyText($('leadPitch').textContent));
+$('leadState').addEventListener('change',updateCities);
+['businessType','tone','siteStyle','siteLayout','sectionCount'].forEach(id=>$(id).addEventListener('change',generate));
+$('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();if(q.includes('lead'))scrollToSection('lead-finder');if(q.includes('sell'))scrollToSection('sales');if(q.includes('generate'))scrollToSection('generator');if(q.includes('content'))setPath('content');if(q.includes('profile'))setPath('profile');if(q.includes('review'))setPath('review');if(q.includes('magnet'))setPath('lead');if(q.includes('website'))setPath('website');});
+initStates(); generate(); findLeads();
+</script>
+</body>
+</html>
