@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PathPay Clickable Bundle Dashboard</title>
+<title>PathPay AI Service Bundle Dashboard</title>
 <style>
 :root{
   --bg:#030713;--panel:rgba(9,18,40,.86);--panel2:rgba(13,27,58,.78);--line:rgba(255,255,255,.12);
@@ -61,6 +61,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
 .contentCalendar{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}.dayCard{border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.06);padding:10px;min-height:95px}.dayCard strong{color:#93e7ff;font-size:12px}.dayCard p{font-size:12px;margin-top:6px}.profileMock{border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(255,255,255,.06);padding:20px}.profileRow{display:flex;gap:12px;align-items:center}.profileAvatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:1000;font-size:24px}
 @media(max-width:850px){.productHero,.productProof,.productContact{grid-template-columns:1fr}.productCards,.contentCalendar{grid-template-columns:1fr}.productHero h1{font-size:44px}.layout-cards .productVisual{grid-template-columns:1fr}}
 
+
+.deployLayout{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;padding:14px}
+.deployPanel{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:15px;min-width:0}
+.deployPanel h3{margin-bottom:8px}
+.deployPanel p{color:var(--soft);font-size:13px;line-height:1.5;margin-bottom:12px}
+.deployCode{width:100%;min-height:430px;max-height:620px;resize:vertical;border:1px solid var(--line);border-radius:16px;background:#040815;color:#d7e6fb;padding:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;line-height:1.5;outline:none;white-space:pre;overflow:auto}
+.deploySteps{display:grid;gap:10px}
+.deployStep{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.045);padding:12px}
+.deployStep strong{display:block;margin-bottom:5px}
+.deployStep span{display:block;color:var(--muted);font-size:12px;line-height:1.45}
+@media(max-width:1250px){.deployLayout{grid-template-columns:1fr}.deployLayout .salesGrid{grid-template-columns:1fr}}
+@media(max-width:900px){.deployLayout .salesGrid{grid-template-columns:1fr}}
+
 @media(max-width:1250px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.nav{grid-template-columns:repeat(3,1fr)}.heroGrid,.generatorLayout,.outputMain,.leadGrid{grid-template-columns:1fr}.metrics,.reviewGrid,.salesGrid{grid-template-columns:repeat(2,1fr)}.pathTabs{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.main{padding:14px 12px 30px}.topbar{margin:-14px -12px 16px;padding:0 12px}.profile{display:none}.nav{grid-template-columns:1fr 1fr}.metrics,.reviewGrid,.salesGrid,.two{grid-template-columns:1fr}.hero h2{font-size:38px}.generatedProduct{height:auto;max-height:none}}
 </style>
@@ -68,7 +81,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
 <body>
 <div class="app">
   <aside class="sidebar">
-    <div class="brand"><div class="logo">PP</div><div><h1>PathPay</h1><p>Clickable Bundle</p></div></div>
+    <div class="brand"><div class="logo">PP</div><div><h1>PathPay</h1><p>AI Bundle</p></div></div>
     <nav class="nav">
       <button class="active" data-jump="overview"><span class="ico">⌂</span>Overview</button>
       <button data-jump="generator"><span class="ico">⚡</span>Generator</button>
@@ -78,8 +91,8 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
       <button data-jump="faq"><span class="ico">?</span>FAQ</button>
     </nav>
     <div class="sideBox">
-      <strong>Everything Clicks Now</strong>
-      <p>Dashboard nav scrolls. Path buttons switch products. Website navbar scrolls inside the generated website. Lead buttons load into generator.</p>
+      <strong>Bundle Dashboard</strong>
+      <p>Generate products, copy deployment code, find leads, and use the sales system to package each offer.</p>
       <button class="ghost full" data-jump="generator">Open Generator</button>
     </div>
   </aside>
@@ -97,18 +110,18 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
     <section id="overview" class="heroGrid">
       <div class="panel hero">
         <div class="welcome">Welcome back, Cameron 👋</div>
-        <h2>PathPay <span class="grad">Clickable Generator</span></h2>
-        <p>This version uses real click handlers instead of broken preview buttons. Click the dashboard tabs, product tabs, generated website nav, lead finder buttons, copy buttons, and download buttons.</p>
+        <h2>PathPay <span class="grad">AI Service Dashboard</span></h2>
+        <p>Generate client-ready AI service products, preview them live, copy the code, and deploy the finished product through GitHub and Vercel.</p>
       </div>
       <div class="panel cta">
-        <div><h3>⚡ Working Click Mode</h3><p>Use the filters, click Generate, then click around the generated product in the large preview.</p></div>
+        <div><h3>⚡ Product Builder Mode</h3><p>Use the filters, generate a product, preview it, then copy the deployment code and launch it.</p></div>
         <div class="action-row"><button class="primary" data-jump="generator">Open Generator</button><button class="ghost" id="randomizeBtn">Randomize</button></div>
       </div>
     </section>
 
     <section class="metrics">
       <div class="metric"><small>Generated Products</small><strong id="mProducts">156</strong><span>+28% this week</span></div>
-      <div class="metric"><small>Click System</small><strong>Fixed</strong><span>tabs + nav work</span></div>
+      <div class="metric"><small>Product Preview</small><strong>Live</strong><span>interactive output</span></div>
       <div class="metric"><small>Paths Included</small><strong>5</strong><span>all switchable</span></div>
       <div class="metric"><small>Starter Price</small><strong>$299</strong><span>package guidance</span></div>
       <div class="metric"><small>Leads Found</small><strong id="mLeads">1,248</strong><span>+32% this week</span></div>
@@ -116,7 +129,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
 
     <section id="generator" class="section panel">
       <div class="sectionTitle">
-        <div><h2>Clickable Working Generator</h2><p>Switch product type, change filters, generate, then click inside the generated product.</p></div>
+        <div><h2>AI Product Generator</h2><p>Switch product type, change filters, generate the product, then copy the code for GitHub and Vercel.</p></div>
         <button class="small" id="downloadProductBtn">Download Product HTML</button>
       </div>
       <div class="generator">
@@ -185,12 +198,44 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
     </section>
 
     <section id="sales" class="section panel">
-      <div class="sectionTitle"><div><h2>How To Sell, Package, and Prepare</h2><p>This stays separate from the generated product so the preview stays clean and big.</p></div><button class="small" id="downloadSalesBtn">Download Sales System</button></div>
-      <div id="salesGrid" class="salesGrid"></div>
+      <div class="sectionTitle">
+        <div>
+          <h2>Sell, Package, Deploy</h2>
+          <p>Use the sales system to pitch the offer, then copy the generated code into GitHub as <strong>index.html</strong> and deploy it on Vercel.</p>
+        </div>
+        <button class="small" id="downloadSalesBtn">Download Sales System</button>
+      </div>
+
+      <div class="deployLayout">
+        <div>
+          <div id="salesGrid" class="salesGrid" style="padding:0"></div>
+        </div>
+
+        <div class="deployPanel">
+          <h3>Product Code For GitHub + Vercel</h3>
+          <p>This is the exact code for the generated product. Copy it, create a file named <strong>index.html</strong> in GitHub, paste it, commit it, then deploy the repo on Vercel.</p>
+          <textarea id="deployCode" class="deployCode" readonly></textarea>
+          <div class="action-row">
+            <button class="small" id="copyDeployCodeBtn">Copy Code</button>
+            <button class="small" id="downloadDeployCodeBtn">Download index.html</button>
+            <button class="small" id="openProductBtn2">Open Preview</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="deployPanel" style="margin:0 14px 14px">
+        <h3>Deploy Steps</h3>
+        <div class="deploySteps">
+          <div class="deployStep"><strong>1. Copy the code</strong><span>Use the “Copy Code” button above.</span></div>
+          <div class="deployStep"><strong>2. Create index.html</strong><span>In GitHub, create or edit a file named exactly <strong>index.html</strong>.</span></div>
+          <div class="deployStep"><strong>3. Paste and commit</strong><span>Paste the generated code, then commit changes to the repo.</span></div>
+          <div class="deployStep"><strong>4. Deploy on Vercel</strong><span>Import the repo into Vercel and deploy. The client ends up with a live link.</span></div>
+        </div>
+      </div>
     </section>
 
     <section id="lead-finder" class="section panel">
-      <div class="sectionTitle"><div><h2>Lead Finder</h2><p>Every button here works: use lead, make pitch, Google, Maps, export.</p></div><button class="small" id="exportLeadsBtn">Export Leads</button></div>
+      <div class="sectionTitle"><div><h2>Lead Finder</h2><p>Find leads, make a pitch, open Google/Maps, or load the business directly into the generator.</p></div><button class="small" id="exportLeadsBtn">Export Leads</button></div>
       <div class="leadGrid">
         <div class="toolPanel">
           <div class="two"><div><label>State</label><select id="leadState"></select></div><div><label>City</label><select id="leadCity"></select></div></div>
@@ -206,9 +251,9 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;
     <section id="reviews" class="section panel">
       <div class="sectionTitle"><div><h2>Reviews & Results</h2><p>Trust section for the bundle dashboard.</p></div></div>
       <div class="reviewGrid">
-        <div class="review"><div class="person"><div class="face">JM</div><div><strong>Jessica Martinez</strong><br><small style="color:var(--muted)">Digital Marketer</small></div></div><div class="stars">★★★★★</div><p>“Now the website nav and dashboard buttons actually click around.”</p><div class="result"><span>$4,800 generated</span><span>+42%</span></div></div>
-        <div class="review"><div class="person"><div class="face">DK</div><div><strong>Daniel Kim</strong><br><small style="color:var(--muted)">Agency Owner</small></div></div><div class="stars">★★★★★</div><p>“The path buttons switch products and the lead finder loads businesses into the generator.”</p><div class="result"><span>62% review lift</span><span>+62%</span></div></div>
-        <div class="review"><div class="person"><div class="face">TB</div><div><strong>Tyler Brooks</strong><br><small style="color:var(--muted)">Freelancer</small></div></div><div class="stars">★★★★★</div><p>“It finally feels like a real product instead of a static mockup.”</p><div class="result"><span>18 deals closed</span><span>+36%</span></div></div>
+        <div class="review"><div class="person"><div class="face">JM</div><div><strong>Jessica Martinez</strong><br><small style="color:var(--muted)">Digital Marketer</small></div></div><div class="stars">★★★★★</div><p>“The live preview and deployment code made it easy to show clients a real finished product.”</p><div class="result"><span>$4,800 generated</span><span>+42%</span></div></div>
+        <div class="review"><div class="person"><div class="face">DK</div><div><strong>Daniel Kim</strong><br><small style="color:var(--muted)">Agency Owner</small></div></div><div class="stars">★★★★★</div><p>“The lead finder and generator helped me package service offers faster.”</p><div class="result"><span>62% review lift</span><span>+62%</span></div></div>
+        <div class="review"><div class="person"><div class="face">TB</div><div><strong>Tyler Brooks</strong><br><small style="color:var(--muted)">Freelancer</small></div></div><div class="stars">★★★★★</div><p>“It feels like a real dashboard I can use to build and deliver client products.”</p><div class="result"><span>18 deals closed</span><span>+36%</span></div></div>
       </div>
     </section>
 
@@ -416,8 +461,10 @@ function generate(){
   salesSystem=buildSales(v);
   renderSales();
   productHTML=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(v.name)} ${esc(pathInfo[currentPath].title)}</title><style>${getStandaloneCSS()}</style></head><body>${html}<script>${standaloneClickScript()}<\/script></body></html>`;
+  const deployBox = $('deployCode');
+  if(deployBox){ deployBox.value = productHTML; }
   generationCount++; $('mProducts').textContent=String(generationCount);
-  toast('Product generated — click around now');
+  toast('Product generated');
 }
 function getStandaloneCSS(){
   const style=document.querySelector('style').innerHTML;
@@ -433,6 +480,8 @@ function copyText(t){navigator.clipboard.writeText(t);toast('Copied')}
 function downloadProduct(){downloadFile(`${slug(vals().name)}-${currentPath}-product.html`,productHTML,'text/html')}
 function downloadAssets(){downloadFile(`${slug(vals().name)}-${currentPath}-assets.txt`,productAssets)}
 function openProduct(){const blob=new Blob([productHTML],{type:'text/html'});window.open(URL.createObjectURL(blob),'_blank')}
+function copyDeployCode(){copyText(productHTML || ($('deployCode') ? $('deployCode').value : ''))}
+function downloadDeployCode(){downloadFile('index.html', productHTML || ($('deployCode') ? $('deployCode').value : ''), 'text/html')}
 function downloadSales(){downloadFile(`${slug(vals().name)}-${currentPath}-sales-system.txt`,Object.values(salesSystem).join('\n\n---\n\n'))}
 function demoFill(){
   $('businessName').value='Brightline Med Spa';$('businessType').value='Med Spa';$('location').value='Cincinnati, OH';$('offer').value='Book more skin consultations';$('tone').value='Luxury';$('priceTier').value='$799 premium';$('siteStyle').value='luxury';$('siteLayout').value='split';$('ctaText').value='Book A Consultation';$('sectionCount').value='6 sections';$('notes').value='Needs premium content, trust, and a stronger online presence.';setPath('website');
@@ -494,6 +543,9 @@ $('copyAssetsBtn').addEventListener('click',()=>copyText(productAssets));
 $('downloadAssetsBtn').addEventListener('click',downloadAssets);
 $('openProductBtn').addEventListener('click',openProduct);
 $('downloadSalesBtn').addEventListener('click',downloadSales);
+const copyDeployBtn = $('copyDeployCodeBtn'); if(copyDeployBtn) copyDeployBtn.addEventListener('click', copyDeployCode);
+const downloadDeployBtn = $('downloadDeployCodeBtn'); if(downloadDeployBtn) downloadDeployBtn.addEventListener('click', downloadDeployCode);
+const openProductBtn2 = $('openProductBtn2'); if(openProductBtn2) openProductBtn2.addEventListener('click', openProduct);
 $('findLeadsBtn').addEventListener('click',findLeads);
 $('clearLeadsBtn').addEventListener('click',clearLeads);
 $('exportLeadsBtn').addEventListener('click',exportLeads);
